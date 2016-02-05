@@ -68,6 +68,7 @@ public class GenericDAO <T, ID extends Serializable> implements IDAO<T, ID>
 
     @Override
     public List<T> findAll() {
+        
         return getEntityManager()
                 .createQuery("from " + getPersistentClass().getSimpleName())
                 .getResultList();

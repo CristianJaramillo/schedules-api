@@ -20,8 +20,7 @@ public class PoweredByResponseFilter implements ContainerResponseFilter {
     
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-            logger.info("PoweredByResponseFilter");
-            responseContext.getHeaders().add("X-Powered-By", "Jersey :-)");
+            logger.info(PoweredByResponseFilter.class);
     }
     
 }

@@ -15,9 +15,8 @@ import javax.ws.rs.core.Response;
  */
 public class CategoryController extends Controller
 {
-    private CategoryManager categoryManager;
-    private CategoryRepository categoryRepository;
     
+    private CategoryRepository categoryRepository;
     
     /**
      *
@@ -65,6 +64,5 @@ public class CategoryController extends Controller
                 .entity(newCategory)
                 .build();
     }
-       
     
 }

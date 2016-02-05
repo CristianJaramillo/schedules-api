@@ -6,7 +6,10 @@ package com.jccg.schedules.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -24,7 +27,7 @@ import org.hibernate.validator.constraints.Email;
 public class User extends Model
 {
     @Id
-    @GeneratedValue(generator="increment")
+    @GeneratedValue(generator="increment", strategy=GenerationType.AUTO)
     @GenericGenerator(name="increment", strategy = "increment")
     @XmlAttribute
     private Long id;
