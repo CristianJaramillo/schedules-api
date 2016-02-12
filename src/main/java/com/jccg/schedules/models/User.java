@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -19,6 +21,10 @@ import org.hibernate.validator.constraints.Email;
  * @author Cristian Gerardo Jaramillo Cruz
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "User.allByAuthorized", 
+                           query = "from User u where u.authorized = :authorized")
+})
 @Table(name="users")
 @XmlRootElement
 public class User extends Model
@@ -39,6 +45,8 @@ public class User extends Model
     @NotNull
     @XmlAttribute
     private String password;
+    @XmlAttribute(name="category_id")
+    private Long categoryId;
     @XmlAttribute
     private Boolean authorized;
     
@@ -89,11 +97,11 @@ public class User extends Model
     
     /**
      *
-     * @return 
+     * @return
      */
     public String getFullName()
     {
-        return this.fullName;
+        return fullName;
     }
 
     /**
@@ -111,7 +119,7 @@ public class User extends Model
      */
     public String getEmail()
     {
-        return this.email;
+        return email;
     }
     
     /**
@@ -129,7 +137,23 @@ public class User extends Model
      */
     public String getPassword()
     {
-        return this.password;
+        return password;
+    }
+
+    /**
+     *
+     * @return 
+     */
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    /**
+     *
+     * @param categoryId
+     */
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
     
     /**
@@ -147,7 +171,7 @@ public class User extends Model
      */
     public Boolean getAuthorized()
     {
-        return this.authorized;
+        return authorized;
     }
     
 }

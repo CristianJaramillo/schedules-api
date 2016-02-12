@@ -6,6 +6,7 @@ package com.jccg.schedules.managers;
 import com.jccg.schedules.dao.EntityManagerFactoryServlet;
 import com.jccg.schedules.dao.category.CategoryDAO;
 import com.jccg.schedules.models.Category;
+import com.jccg.schedules.resources.exception.DataNotFoundException;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,12 +42,48 @@ public class CategoryManager extends Manager
         category.setId(null);
         category.setCreatedAt(new Date());
         category.setUpdatedAt(new Date());
+        category.setLinks(null);
+        
         categoryDAO.save(category);
+        
         commit();
         
         categoryDAO.getEntityManager().close();
         
         return category;
+    }
+    
+    /**
+     *
+     * @param category
+     * @param updateCategory
+     * @return 
+     */
+    public Category merge(Category category, Category updateCategory)
+    {
+        category.setName(updateCategory.getName());
+        category.setUpdatedAt(new Date());
+        
+        active();
+        
+        categoryDAO.update(category);
+        
+        commit();
+        
+        categoryDAO.getEntityManager().close();
+        
+        return category;
+    }
+    
+    public void delete(Category category)
+    {
+        active();
+        
+        categoryDAO.delete(category);
+        
+        commit();
+        
+        categoryDAO.getEntityManager().close();
     }
     
 }

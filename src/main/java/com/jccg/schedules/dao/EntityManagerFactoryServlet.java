@@ -29,7 +29,10 @@ public class EntityManagerFactoryServlet implements ServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent sce) 
     {
-        if(entityManagerFactory == null)
+        
+        logger.info("Created at " +  JPA);
+        
+        if(entityManagerFactory == null)       
             entityManagerFactory = Persistence.createEntityManagerFactory(JPA);
         if(DEBUG)
             logger.info("EntityManagerFactory create");

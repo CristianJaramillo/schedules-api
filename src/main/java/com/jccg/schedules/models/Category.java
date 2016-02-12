@@ -6,6 +6,8 @@ package com.jccg.schedules.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -17,6 +19,9 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Cristian Gerardo Jaramillo Cruz
  */
 @Entity
+@NamedQueries({
+    @NamedQuery( name="Category.findAll", query = "from Category c" )
+})
 @Table(name="categories")
 @XmlRootElement
 public class Category extends Model
@@ -41,13 +46,11 @@ public class Category extends Model
     
     /**
      *
-     * @param id
      * @param name
      */
-    public Category(Long id, String name) 
+    public Category(String name) 
     {
         this();
-        this.id = id;
         this.name = name;
     }
     

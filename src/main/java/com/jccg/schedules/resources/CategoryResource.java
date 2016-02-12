@@ -9,8 +9,10 @@ import com.jccg.schedules.managers.filters.CategoryFilter;
 import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,8 +26,8 @@ import javax.ws.rs.core.UriInfo;
  * @author Cristian Gerardo Jaramillo Cruz
  */
 @Path("categories")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class CategoryResource extends Resource
 {
     
@@ -52,13 +54,15 @@ public class CategoryResource extends Resource
 
     /**
      *
+     * @param uriInfo
      * @param id
      * @return 
      */
     @GET
     @Path("{id}")
-    public Response getCategory(@PathParam("id") Long id)
+    public Response getCategory(@Context UriInfo uriInfo, @PathParam("id") Long id)
     {
+        categoryController.setUriInfo(uriInfo);
         return categoryController.find(id);
     }
     
@@ -71,37 +75,32 @@ public class CategoryResource extends Resource
     @POST
     public Response addCategory(@Context UriInfo uriInfo, @Valid Category category)
     {
-        categoryController.setUriInfo(uriInfo);
-        
+        categoryController.setUriInfo(uriInfo);        
         return categoryController.create(category);
     } 
 
-//    /**
-//     *
-//     * @param id
-//     * @param category
-//     * @return 
-//     */
-//    @PUT
-//    @Path("{id}")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Category updateCategory(@PathParam("id") Long id, Category category)
-//    {
-//        category.setId(id);
-//        
-//        return (Category)service.update(category);
-//    }
-//    
-//    /**
-//     *
-//     * @param id
-//     * @return 
-//     */
-//    @DELETE
-//    @Path("{id}")
-//    public Category removeCategory(@PathParam("id") long id)
-//    {
-//        return (Category)service.remove(id);
-//    }
+    /**
+     *
+     * @param id
+     * @param updateCategory
+     * @return 
+     */
+    @PUT
+    @Path("{id}")
+    public Response updateCategory(@PathParam("id") Long id, Category updateCategory)
+    {
+        return categoryController.update(id, updateCategory);
+    }
+    
+    /**
+     *
+     * @param id
+     */
+    @DELETE
+    @Path("{id}")
+    public void deleteCategory(@PathParam("id") long id)
+    {
+        categoryController.delete(id);
+    }
     
 }

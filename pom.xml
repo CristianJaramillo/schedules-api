@@ -25,6 +25,8 @@
         <!-- Hibernet Version -->
         <version.hibernate>5.0.7.Final</version.hibernate>
 
+        <!-- Jackson Version -->
+        <version.jackson>2.7.1</version.jackson>
         <!-- Version slf4j Simple -->
         <version.slf4j-simple>1.7.5</version.slf4j-simple>
 
@@ -61,6 +63,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.bundles</groupId>
+            <artifactId>jaxrs-ri</artifactId>
         </dependency>
 
         <dependency>

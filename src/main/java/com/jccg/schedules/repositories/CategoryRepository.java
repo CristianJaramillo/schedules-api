@@ -8,6 +8,7 @@ import com.jccg.schedules.dao.category.CategoryDAO;
 import com.jccg.schedules.models.Category;
 import com.jccg.schedules.managers.filters.CategoryFilter;
 import java.util.List;
+import javax.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class CategoryRepository extends Repository
 {
-    private static final Logger logger = LogManager.getLogger(UserRepository.class);
+    private static final Logger logger = LogManager.getLogger(CategoryRepository.class);
     private final CategoryDAO categoryDAO;
     
     public CategoryRepository()
@@ -27,13 +28,17 @@ public class CategoryRepository extends Repository
         setEntityTransaction(categoryDAO.getEntityManager().getTransaction());
     }
     
-    public Category[] all(CategoryFilter filter)
+    public Category[] all(CategoryFilter categoryFilter)
     {
     
         active();
         
-        // Falta aplicar userFiltro
-        List<Category> categories = categoryDAO.findAll();
+        TypedQuery<Category> query = categoryDAO.getEntityManager().createNamedQuery("Category.findAll", Category.class);
+        
+        query.setFirstResult(categoryFilter.getStart());
+        query.setMaxResults(categoryFilter.getSize());
+        
+        List<Category> categories = query.getResultList();
         
         commit();
         

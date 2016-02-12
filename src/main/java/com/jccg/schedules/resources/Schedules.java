@@ -4,15 +4,15 @@
 package com.jccg.schedules.resources;
 
 import javax.ws.rs.ApplicationPath;
-import org.glassfish.jersey.server.ResourceConfig;
+import javax.ws.rs.core.Application;
 /**
  *
  * @author Cristian Gerardo Jaramillo Cruz
  */
-@ApplicationPath("/")
-public class ApplicationResource extends ResourceConfig
+@ApplicationPath("api")
+public class Schedules extends Application
 {
-    public ApplicationResource()
+    public Schedules()
     {
         
     }

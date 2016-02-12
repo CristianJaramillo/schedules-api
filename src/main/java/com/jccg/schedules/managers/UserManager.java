@@ -43,6 +43,7 @@ public class UserManager extends Manager
         user.setAuthorized(false);
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
+        user.setLinks(null);
         userDAO.save(user);
         
         commit();
@@ -51,21 +52,47 @@ public class UserManager extends Manager
         
         return user;
     }
-
+    
     /**
      *
+     * @param user
+     * @param updateUser
      * @return 
      */
-    public User update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public User merge(User user, User updateUser)
+    {
+        
+        user.setFullName(updateUser.getFullName());
+        user.setEmail(updateUser.getEmail());
+        user.setPassword(updateUser.getPassword());        
+        Boolean authorized = updateUser.getAuthorized() == null ? user.getAuthorized() : updateUser.getAuthorized();
+        user.setAuthorized(authorized);        
+        user.setUpdatedAt(new Date());
+        
+        active();
+        
+        userDAO.update(user);
+        
+        commit();
+        
+        userDAO.getEntityManager().close();
+        
+        return user;
     }
-
+    
     /**
-     *
-     * @return 
+     * 
+     * @param user
      */
-    public User path() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(User user)
+    {
+        active();
+        
+        userDAO.delete(user);
+        
+        commit();
+        
+        userDAO.getEntityManager().close();
     }
     
 }

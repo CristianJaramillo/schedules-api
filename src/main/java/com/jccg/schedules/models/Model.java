@@ -4,14 +4,18 @@
 package com.jccg.schedules.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -19,9 +23,11 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 @MappedSuperclass
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Model implements Serializable
+public abstract class Model implements Serializable
 {
-    
+    /**
+     *
+     */
     private static final long serialVersionUID = 8997897772179927197L;
     
     @Column(name="created_at")
@@ -32,11 +38,13 @@ public class Model implements Serializable
     @Temporal(TemporalType.TIMESTAMP)
     @XmlAttribute(name="updated_at")
     private Date updatedAt;
+    @Transient
+    private List<Link> links;
     
     public Model()
     {
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
+        createdAt = new Date();
+        updatedAt = new Date();
     }
     
     /**
@@ -69,6 +77,35 @@ public class Model implements Serializable
     public Date getUpdatedAt()
     {
         return this.updatedAt;
+    }
+    
+    /**
+     *
+     * @return 
+     */
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    /**
+     *
+     * @param links
+     */
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+    
+    /**
+     *
+     * @param href
+     * @param rel
+     */
+    public void addLink(String href, String rel)
+    {
+        if(links == null)
+            links = new ArrayList<>();
+        
+        links.add(new Link(href, rel));
     }
     
 }

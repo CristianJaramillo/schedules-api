@@ -8,6 +8,7 @@ import com.jccg.schedules.dao.user.UserDAO;
 import com.jccg.schedules.models.User;
 import com.jccg.schedules.managers.filters.UserFilter;
 import java.util.List;
+import javax.persistence.TypedQuery;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -35,9 +36,15 @@ public class UserRepository extends Repository
     {
     
         active();
+    
+        TypedQuery<User> query = userDAO.getEntityManager().createNamedQuery("User.allByAuthorized", User.class);
         
-        // Falta aplicar userFiltro
-        List<User> users = userDAO.findAll();
+        query.setFirstResult(userFilter.getStart());
+        query.setMaxResults(userFilter.getSize());
+        
+        query.setParameter("authorized", userFilter.getAuthorized());
+        
+        List<User> users = query.getResultList();
         
         commit();
         

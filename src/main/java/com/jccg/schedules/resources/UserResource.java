@@ -9,9 +9,11 @@ import com.jccg.schedules.managers.filters.UserFilter;
 import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -25,8 +27,8 @@ import javax.ws.rs.core.UriInfo;
  * @author Cristian Gerardo Jaramillo Cruz
  */
 @Path("users")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class UserResource extends Resource
 {        
     
@@ -49,13 +51,15 @@ public class UserResource extends Resource
 
     /**
      *
+     * @param uriInfo
      * @param id
      * @return 
      */
     @GET
     @Path("{id}")
-    public Response getUser(@PathParam("id") Long id)
+    public Response getUser(@Context UriInfo uriInfo, @PathParam("id") Long id)
     {
+        userController.setUriInfo(uriInfo);
         return userController.find(id);
     }
     
@@ -68,9 +72,32 @@ public class UserResource extends Resource
     @POST
     public Response addUser(@Context UriInfo uriInfo, @Valid User user)
     {
-        userController.setUriInfo(uriInfo);
-        
+        userController.setUriInfo(uriInfo);   
         return userController.create(user);
-    }   
+    }
+    
+    /**
+     *
+     * @param id
+     * @param user
+     * @return 
+     */
+    @PUT
+    @Path("{id}")
+    public Response updateUser(@PathParam("id") Long id, @Valid User user)
+    {
+        return userController.update(id, user);
+    }
+    
+    /**
+     *
+     * @param id
+     */
+    @DELETE
+    @Path("{id}")
+    public void deleteUser(@PathParam("id") Long id)
+    {
+        userController.delete(id);
+    }
     
 }
