@@ -20,6 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * REST Web Service
@@ -32,6 +34,7 @@ import javax.ws.rs.core.UriInfo;
 public class UserResource extends Resource
 {        
     
+    private static final Logger LOGGER = LogManager.getFormatterLogger(UserResource.class);
     private final UserController  userController;
     
     public UserResource()
@@ -40,12 +43,15 @@ public class UserResource extends Resource
     }
     
     /**
+     * @param uriInfo
      * @param filter
      * @return
      */
     @GET
-    public Response getUsers(@BeanParam UserFilter filter)
+    public Response getUsers(@Context UriInfo uriInfo, @BeanParam UserFilter filter)
     {        
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
+        LOGGER.info("authorized " + filter.getAuthorized());
         return userController.all(filter);
     }
 
@@ -59,6 +65,7 @@ public class UserResource extends Resource
     @Path("{id}")
     public Response getUser(@Context UriInfo uriInfo, @PathParam("id") Long id)
     {
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
         userController.setUriInfo(uriInfo);
         return userController.find(id);
     }
@@ -72,31 +79,36 @@ public class UserResource extends Resource
     @POST
     public Response addUser(@Context UriInfo uriInfo, @Valid User user)
     {
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
         userController.setUriInfo(uriInfo);   
         return userController.create(user);
     }
     
     /**
      *
+     * @param uriInfo
      * @param id
      * @param user
      * @return 
      */
     @PUT
     @Path("{id}")
-    public Response updateUser(@PathParam("id") Long id, @Valid User user)
+    public Response updateUser(@Context UriInfo uriInfo, @PathParam("id") Long id, @Valid User user)
     {
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
         return userController.update(id, user);
     }
     
     /**
      *
+     * @param uriInfo
      * @param id
      */
     @DELETE
     @Path("{id}")
-    public void deleteUser(@PathParam("id") Long id)
+    public void deleteUser(@Context UriInfo uriInfo, @PathParam("id") Long id)
     {
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
         userController.delete(id);
     }
     

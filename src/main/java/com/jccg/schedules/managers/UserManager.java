@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class UserManager extends Manager
 {
 
-    private static final Logger logger = LogManager.getLogger(UserManager.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserManager.class);
     private final UserDAO userDAO;
     
     /**
@@ -27,7 +27,7 @@ public class UserManager extends Manager
     {
         userDAO = new UserDAO();
         userDAO.setEntityManager(EntityManagerFactoryServlet.createEntityManager());
-        setEntityTransaction(userDAO.getEntityManager().getTransaction());   
+        super.setEntityTransaction(userDAO.getEntityManager().getTransaction());   
     }
     
     /**
@@ -37,13 +37,15 @@ public class UserManager extends Manager
      */
     public User save(User user)
     {
-        active();
-        
         user.setId(null);
-        user.setAuthorized(false);
+        user.setCategoryId(null);
+        user.setAuthorized(Boolean.FALSE);
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         user.setLinks(null);
+        
+        active();
+        
         userDAO.save(user);
         
         commit();
@@ -61,7 +63,7 @@ public class UserManager extends Manager
      */
     public User merge(User user, User updateUser)
     {
-        
+        LOGGER.info("Set update user data");
         user.setFullName(updateUser.getFullName());
         user.setEmail(updateUser.getEmail());
         user.setPassword(updateUser.getPassword());        
@@ -71,12 +73,14 @@ public class UserManager extends Manager
         
         active();
         
+        LOGGER.info("Save changes user");
         userDAO.update(user);
         
         commit();
         
         userDAO.getEntityManager().close();
         
+        LOGGER.info("Resturn user update");
         return user;
     }
     

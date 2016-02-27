@@ -16,10 +16,7 @@ public class Link
     /**
      *
      */
-    public Link()
-    {
-        
-    }
+    public Link() {}
     
     /**
      *

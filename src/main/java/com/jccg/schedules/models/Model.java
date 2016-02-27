@@ -15,7 +15,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,19 +32,13 @@ public abstract class Model implements Serializable
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @XmlAttribute(name="created_at")
-    private Date createdAt;
+    protected Date createdAt;
     @Column(name="updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @XmlAttribute(name="updated_at")
-    private Date updatedAt;
+    protected Date updatedAt;
     @Transient
-    private List<Link> links;
-    
-    public Model()
-    {
-        createdAt = new Date();
-        updatedAt = new Date();
-    }
+    protected List<Link> links;
     
     /**
      * @param createdAt
@@ -104,7 +97,6 @@ public abstract class Model implements Serializable
     {
         if(links == null)
             links = new ArrayList<>();
-        
         links.add(new Link(href, rel));
     }
     

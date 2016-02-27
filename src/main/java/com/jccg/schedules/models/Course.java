@@ -29,10 +29,7 @@ public class Course extends Model
     /**
      *
      */
-    public Course() 
-    {
-        super();
-    }
+    public Course() {}
     
     /**
      *
@@ -41,7 +38,6 @@ public class Course extends Model
      */
     public Course(long id, String name) 
     {
-        this();
         this.id = id;
         this.name = name;
     }

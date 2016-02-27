@@ -20,6 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -31,6 +33,7 @@ import javax.ws.rs.core.UriInfo;
 public class CategoryResource extends Resource
 {
     
+    private static final Logger LOGGER = LogManager.getLogger(CategoryResource.class);
     private final CategoryController categoryController;
 
     /**
@@ -62,6 +65,7 @@ public class CategoryResource extends Resource
     @Path("{id}")
     public Response getCategory(@Context UriInfo uriInfo, @PathParam("id") Long id)
     {
+        LOGGER.info(uriInfo.getAbsolutePath().toString());
         categoryController.setUriInfo(uriInfo);
         return categoryController.find(id);
     }

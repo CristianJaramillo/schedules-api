@@ -7,11 +7,14 @@ import com.jccg.schedules.managers.UserManager;
 import com.jccg.schedules.models.User;
 import com.jccg.schedules.repositories.UserRepository;
 import com.jccg.schedules.managers.filters.UserFilter;
+import com.jccg.schedules.models.Category;
 import com.jccg.schedules.resources.CategoryResource;
 import com.jccg.schedules.resources.UserResource;
 import com.jccg.schedules.resources.exception.DataNotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -19,6 +22,8 @@ import javax.ws.rs.core.Response.Status;
  */
 public class UserController extends Controller
 {    
+    
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
     private final UserRepository userRepository;
     
     /**
@@ -31,16 +36,23 @@ public class UserController extends Controller
     
     public Response all(UserFilter userFilter)
     {
+        LOGGER.info("All users");        
         return Response.ok(userRepository.all(userFilter)).build();
     }
     
+    /**
+     *
+     * @param id
+     * @return 
+     */
     public Response find(Long id)
     {
-        User user = userRepository.find(id);
+
+        LOGGER.info("search User by id " + id);
         
-        if(user == null)
-            throw new DataNotFoundException("User with id " + id + " not found");
+        User user = userFind(id);
         
+        LOGGER.info("Add link self");
         user.addLink(getUriInfo()
                 .getBaseUriBuilder()
                 .path(UserResource.class)
@@ -50,15 +62,19 @@ public class UserController extends Controller
                 .toString()
                 , "self");
         
+        LOGGER.info("Add link category");
         user.addLink(getUriInfo()
                 .getBaseUriBuilder()
                 .path(CategoryResource.class)
                 .path(CategoryResource.class, "getCategory")
-                .resolveTemplate("id", user.getCategoryId())
+                .resolveTemplate("id", user.getCategory().getId())
                 .build()
                 .toString()
                 , "category");
         
+        LOGGER.info("User with Category by name " + user.getCategory().getName());
+        
+        LOGGER.info("return user by id " + id);
         return Response.ok(user).build();
     }
     
@@ -69,13 +85,20 @@ public class UserController extends Controller
      */
     public Response create(User newUser)
     {
-        // valida si tiene permisos asignación de role
-        if(true)
-            // en caso contrario asigna un roll por default
+        LOGGER.info("Define category_id if is value null ");
+        if(newUser.getCategoryId() == null)
             newUser.setCategoryId(1L);
         
+        LOGGER.info("Search category with id " + newUser.getCategoryId());
+        Category category = new CategoryController().categoryFind(newUser.getCategoryId());
+        
+        LOGGER.info("Set category with id " + newUser.getCategoryId());
+        newUser.setCategory(category);
+        
+        LOGGER.info("Save new User");
         newUser = new UserManager().save(newUser);
         
+        LOGGER.info("Return new create User with id " + newUser.getId());
         return Response.created(getURILocation(newUser.getId()))
                 .status(Status.CREATED)
                 .entity(newUser)
@@ -90,7 +113,15 @@ public class UserController extends Controller
      */
     public Response update(Long id, User updateUser)
     {
-        return Response.ok(new UserManager().merge(updateUser, updateUser)).build();
+        LOGGER.info("Update user by id " +  id);
+        User user = userFind(id);
+        
+        LOGGER.info("Valid category by id " + updateUser.getCategoryId());
+        if(updateUser.getCategoryId() != null)
+            user.setCategory(new CategoryController().categoryFind(updateUser.getCategoryId()));
+        
+        LOGGER.info("Return user update");
+        return Response.ok(new UserManager().merge(user, updateUser)).build();
     }
 
     /**
@@ -103,8 +134,10 @@ public class UserController extends Controller
 
     /**
      *
+     * @param id
+     * @return 
      */
-    private User userFind(Long id)
+    public User userFind(Long id)
     {
         User user = userRepository.find(id);
         

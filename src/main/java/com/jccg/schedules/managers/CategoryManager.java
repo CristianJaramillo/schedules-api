@@ -6,7 +6,6 @@ package com.jccg.schedules.managers;
 import com.jccg.schedules.dao.EntityManagerFactoryServlet;
 import com.jccg.schedules.dao.category.CategoryDAO;
 import com.jccg.schedules.models.Category;
-import com.jccg.schedules.resources.exception.DataNotFoundException;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class CategoryManager extends Manager
 {
-    private static final Logger logger = LogManager.getLogger(CategoryManager.class);
+    private static final Logger LOGGER = LogManager.getLogger(CategoryManager.class);
     private final CategoryDAO categoryDAO;
             
     /**
@@ -27,7 +26,7 @@ public class CategoryManager extends Manager
     {
         categoryDAO = new CategoryDAO();
         categoryDAO.setEntityManager(EntityManagerFactoryServlet.createEntityManager());
-        setEntityTransaction(categoryDAO.getEntityManager().getTransaction());
+        super.setEntityTransaction(categoryDAO.getEntityManager().getTransaction());
     }
     
     /**
@@ -42,6 +41,7 @@ public class CategoryManager extends Manager
         category.setId(null);
         category.setCreatedAt(new Date());
         category.setUpdatedAt(new Date());
+        // presento links en null para no regresar en respuesta
         category.setLinks(null);
         
         categoryDAO.save(category);

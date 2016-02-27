@@ -29,10 +29,7 @@ public class Group extends Model
     /**
      *
      */
-    public Group() 
-    {
-        super();
-    }
+    public Group() {}
     
     /**
      *
@@ -41,7 +38,6 @@ public class Group extends Model
      */
     public Group(Long id, String name) 
     {
-        this();
         this.id = id;
         this.name = name;
     }

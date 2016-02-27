@@ -7,6 +7,7 @@ import com.jccg.schedules.managers.CategoryManager;
 import com.jccg.schedules.models.Category;
 import com.jccg.schedules.repositories.CategoryRepository;
 import com.jccg.schedules.managers.filters.CategoryFilter;
+import com.jccg.schedules.models.User;
 import com.jccg.schedules.resources.CategoryResource;
 import com.jccg.schedules.resources.exception.DataNotFoundException;
 import javax.ws.rs.core.Response;
@@ -19,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class CategoryController extends Controller
 {
-    private static final Logger logger = LogManager.getLogger(CategoryController.class);
+    private static final Logger LOGGER = LogManager.getLogger(CategoryController.class);
     private final CategoryRepository categoryRepository;
     
     /**
@@ -37,6 +38,7 @@ public class CategoryController extends Controller
      */
     public Response all(CategoryFilter filter)
     {
+        LOGGER.info("All categories");
         return Response.ok(categoryRepository.all(filter)).build();
     }
     
@@ -47,8 +49,12 @@ public class CategoryController extends Controller
      */
     public Response find(Long id)
     {
+        
+        LOGGER.info("search Category by id " + id);
+        
         Category category = categoryFind(id);
-            
+        
+        LOGGER.info("Add link self");
         category.addLink(getUriInfo()
                 .getBaseUriBuilder()
                 .path(CategoryResource.class)
@@ -58,6 +64,12 @@ public class CategoryController extends Controller
                 .toString()
                 , "self");
         
+        LOGGER.info("Category count users " + category.getUsers().size());
+        
+        for(User user : category.getUsers())
+            LOGGER.info("--> User with id " + user.getId());
+        
+        LOGGER.info("return category by id " + id);
         return Response.ok(category).build();
     }
     
@@ -101,8 +113,10 @@ public class CategoryController extends Controller
     
     /**
      *
+     * @param id
+     * @return 
      */
-    private Category categoryFind(Long id)
+    public Category categoryFind(Long id)
     {
         Category category = categoryRepository.find(id);
         

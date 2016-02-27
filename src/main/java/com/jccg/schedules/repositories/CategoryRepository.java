@@ -9,8 +9,12 @@ import com.jccg.schedules.models.Category;
 import com.jccg.schedules.managers.filters.CategoryFilter;
 import java.util.List;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -18,14 +22,14 @@ import org.apache.logging.log4j.Logger;
  */
 public class CategoryRepository extends Repository
 {
-    private static final Logger logger = LogManager.getLogger(CategoryRepository.class);
+    private static final Logger LOGGER = LogManager.getLogger(CategoryRepository.class);
     private final CategoryDAO categoryDAO;
     
     public CategoryRepository()
     {
         categoryDAO = new CategoryDAO();
         categoryDAO.setEntityManager(EntityManagerFactoryServlet.createEntityManager());
-        setEntityTransaction(categoryDAO.getEntityManager().getTransaction());
+        super.setEntityTransaction(categoryDAO.getEntityManager().getTransaction());
     }
     
     public Category[] all(CategoryFilter categoryFilter)
@@ -43,6 +47,9 @@ public class CategoryRepository extends Repository
         commit();
         
         categoryDAO.getEntityManager().close();
+        
+        for(Category category : categories)
+            LOGGER.info("Category with id " + category.getId());
         
         return categories.toArray(new Category[categories.size()]);
     }

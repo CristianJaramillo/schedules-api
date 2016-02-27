@@ -29,10 +29,7 @@ public class Degree extends Model
     /**
      *
      */
-    public Degree() 
-    {
-        super();
-    }
+    public Degree() {}
     
     /**
      *
@@ -41,7 +38,6 @@ public class Degree extends Model
      */
     public Degree(long id, String name) 
     {
-        this();
         this.id = id;
         this.name = name;
     }

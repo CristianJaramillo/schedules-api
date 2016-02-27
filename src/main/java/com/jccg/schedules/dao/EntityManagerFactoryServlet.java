@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 @WebListener
 public class EntityManagerFactoryServlet implements ServletContextListener
 {    
-    private static final Logger logger = LogManager.getLogger(EntityManagerFactoryServlet.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(EntityManagerFactoryServlet.class.getName());
     private static final String JPA = "com.jccg.schedules.api.jpa";
     private static final Boolean DEBUG = true;
     private static EntityManagerFactory entityManagerFactory;
@@ -30,12 +30,12 @@ public class EntityManagerFactoryServlet implements ServletContextListener
     public void contextInitialized(ServletContextEvent sce) 
     {
         
-        logger.info("Created at " +  JPA);
+        LOGGER.info("Created at " +  JPA);
         
         if(entityManagerFactory == null)       
             entityManagerFactory = Persistence.createEntityManagerFactory(JPA);
         if(DEBUG)
-            logger.info("EntityManagerFactory create");
+            LOGGER.info("EntityManagerFactory create");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class EntityManagerFactoryServlet implements ServletContextListener
         if(entityManagerFactory.isOpen() || entityManagerFactory != null)
             entityManagerFactory.close();
         if(DEBUG)
-            logger.info("EntityManagerFactory close");        
+            LOGGER.info("EntityManagerFactory close");        
     }
     
     public static EntityManager createEntityManager() {

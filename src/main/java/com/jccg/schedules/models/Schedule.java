@@ -43,10 +43,7 @@ public class Schedule extends Model
     /**
      *
      */
-    public Schedule() 
-    {
-        super();
-    }
+    public Schedule() {}
     
     /**
      *
@@ -60,7 +57,6 @@ public class Schedule extends Model
      */
     public Schedule(Long id, Long groupCollectionId, Integer dayOfClass, String building, String classroom, Date classStart, Date toClass) 
     {
-        this();
         this.id = id;
         this.groupCollectionId = groupCollectionId;
         this.dayOfClass = dayOfClass;
