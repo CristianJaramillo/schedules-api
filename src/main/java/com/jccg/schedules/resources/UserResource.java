@@ -29,9 +29,9 @@ import org.apache.logging.log4j.Logger;
  * @author Cristian Gerardo Jaramillo Cruz
  */
 @Path("users")
-@Consumes(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-@Produces(value = {MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class UserResource extends Resource
+@Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+@Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+public class UserResource
 {        
     
     private static final Logger LOGGER = LogManager.getFormatterLogger(UserResource.class);

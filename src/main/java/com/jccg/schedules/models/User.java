@@ -61,6 +61,7 @@ public class User extends Model
     @JoinColumn(name="category_id")
     @ManyToOne(fetch=FetchType.LAZY)
     private Category category;
+    @Column(nullable=false, columnDefinition="char(1)")
     @Convert(converter=BooleanToStringConverter.class)
     @XmlAttribute
     private Boolean authorized;

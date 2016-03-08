@@ -6,7 +6,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Schedules RESTful API</name>
+    <name>Schedules API RESTful</name>
     <description>
         ...
     </description>
